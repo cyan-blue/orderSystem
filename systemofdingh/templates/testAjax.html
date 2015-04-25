@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+<title>ajax test</title>
+<script type="text/javascript" src="/static/js/jquery-latest.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#sum").click(function(){
+            var a = $("#a").val();
+            var b = $("#b").val();
+            $.get("/add/",{'a':a,'b':b}, function(ret){
+            $('#result').html(ret);
+            })
+        });
+        $('#list').click(function(){
+            $.getJSON('/order/ajax_list/',function(ret){
+            //返回值 ret 在这里是一个列表
+            for (var i = ret.length - 1; i >= 0; i--) {
+              // 把 ret 的每一项显示在网页上
+              $('#list_result').append(' ' + ret[i])
+            };
+          })
+      })
+    });
+</script>
+<style type="text/css"></style>
+</head>
+<body>
+<div id="list">Ajax 加载列表</div>
+ <p id="list_result"></p>
+</body>
+</html>

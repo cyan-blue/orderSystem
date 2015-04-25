@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ADD</title>
+    <script type="text/javascript" src="/static/js/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-1.8.0.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#error').hide();
+            $('#submit').click(function (event) {
+                var data1 = $('#id_orderID').val();
+                var data2 = $('#id_orderTitle').val();
+                var data3 = $('#id_supplierId').val();
+                data1 = $.trim(data1);
+                data2 = $.trim(data2);
+                data3 = $.trim(data3);
+                alert(data3)
+                if (data1.length < 1 || data2.length < 1 || data3.length < 1) {
+                    $('#error').show(500);
+                    $('#error').hide(1000);
+                    event.preventDefault();
+                } else {
+                    $('#error').hide();
+                }
+            });
+
+            $('#id_orderID').blur(function () {
+                var orderid = $("#id_orderID").val();
+//                alert(orderid);
+                $.get("/order/checkorderexist", {orderID: orderid},
+                        function (result) {
+                            var ret = eval("(" + result + ")");
+                            if (ret.result) {
+                                $('#check_result').html('该编号已经存在');
+                                document.getElementById("id_orderID").focus();
+                            } else {
+                                $('#check_result').html('可以填写');
+                            }
+                        });
+            })
+
+        });
+        $('html').ajaxSend(function (event, xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                // Only send the token to relative URLs i.e. locally.
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        });
+
+
+    </script>
+
+</head>
+<body>
+<!-- <form action="/order/add/" method="post">
+    {% csrf_token %}
+<table class="table">
+   <caption>采购单</caption>
+
+   <tbody>
+      <tr>
+         <td>标&nbsp;题：{{ form.orderTitle }}</td>
+         <td>商品名字： {{ form.goodsName }}</td>
+         <td>收件人： {{ form.consigneeName }}</td>
+      </tr>
+      <tr>
+         <td>单&nbsp;价：{{ form.unitPrice }}</td>
+         <td>数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量：&nbsp;{{ form.quantityOfItem }}</td>
+         <td>总&nbsp;&nbsp;&nbsp;价： {{ form.totalAmount }}</td>
+      </tr>
+   </tbody>
+</table>
+<input type="submit" value="保存" />
+</form>
+-->
+<form method="post" action="/order/add/">
+    <input type='hidden' name='csrfmiddlewaretoken' value='Zljg7uBco9FpNX72xhqXtqku0kfdhHgC'/>
+    <table>
+        <tr>
+            <th><label for="id_orderID">采购单编号:</label></th>
+            <td><input id="id_orderID" maxlength="10" name="orderID" type="text"
+                       onkeyup="this.value=this.value.replace(/\D/g,'')"
+                       onblur="this.value=this.value.replace(/\D/g,'')"
+                       onafterpaste="this.value=this.value.replace(/\D/g,'')"/> <label id="check_result"></label></td>
+        </tr>
+        <tr>
+            <th><label for="id_orderTitle">订单标题:</label></th>
+            <td><input id="id_orderTitle" maxlength="100" name="orderTitle" type="text"/></td>
+        </tr>
+        <tr>
+            <th><label for="id_consigneeName">收货人名字:</label></th>
+            <td><input id="id_consigneeName" maxlength="10" name="consigneeName" type="text"/></td>
+        </tr>
+        <tr>
+            <th><label>供应商id:</label></th>
+            <td>
+                <select id="id_supplierId" name="supplierId">
+                    <option selected="selected" value="">----请选择----</option>
+                    <option name="供应商1" value="供应商1">供应商1</option>
+                    <option name="供应商2" value="供应商2">供应商2</option>
+                    <option name="供应商3" value="供应商3">供应商3</option>
+
+                </select>
+                <!--<input id="id_supplierId" maxlength="10" name="supplierId" type="text" />-->
+
+            </td>
+        </tr>
+        <tr>
+            <th><label for="id_storehouseId">仓库id:</label></th>
+            <td><input id="id_storehouseId" maxlength="10" name="storehouseId" type="text"/></td>
+        </tr>
+        <tr>
+            <th><label for="id_purchaseType">采购类型:</label></th>
+            <td><input id="id_purchaseType" maxlength="10" name="purchaseType" type="text" required="required"/></td>
+        </tr>
+        <!--<tr><th><label for="id_businessDate">采购日期:</label></th><td>{{form.businessDate}}<input id="id_businessDate" name="businessDate" type="text" required="required"/></td></tr>-->
+        <tr>
+            <th><label for="id_remarks">备注:</label></th>
+            <td><input id="id_remarks" maxlength="100" name="remarks" type="text" required="required"/></td>
+        </tr>
+    </table>
+    <br>
+    <span id="error">数据项为空！</span>
+    <br>
+    <input id="submit" type="submit" value="保存添加订单详情"/>
+    <input type="button" value="返回主页" onclick="window.location.href='/order/home'"/>
+</form>
+
+<!--<form method="post" action="/order/add/" >-->
+<!--{% csrf_token %}-->
+<!--<table>-->
+<!--{{form.as_table}}-->
+<!--</table>-->
+<!--<input type="submit" value="保存"/>-->
+<!--</form>-->
+</body>
+</html>

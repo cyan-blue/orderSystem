@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>采购单列表</title>
+<script src="/static/js/jquery-1.8.0.js"></script>
+<script src="/static/js/layer/layer/layer.js"></script>
+<script type="text/javascript">
+    function displayDate()
+    {
+        document.getElementById("dateriqi").innerHTML=Date();
+    };
+    function displaydetail(orderId)
+    {
+
+        layer.open({
+            type: 2,
+            area: ['600px', '360px'],
+            shadeClose: true,
+            content: '/order/detail/'+orderId
+        });
+    };
+    $("#category").mouseover(function(){
+        layer.open({
+            type: 2,
+            area: ['600px', '360px'],
+            shadeClose: true,
+            content: '/order/detail/1'
+        });
+    });
+
+</script>
+</head>
+<body>
+<p id="dateriqi"></p>
+
+<button type="button" onclick="displayDate()">显示日期</button>
+
+<div align=right>
+<a href="{% url 'logout' %}" > logout</a></div>
+<!--{% if all_orders %}-->
+<!--<table class="table" border="1" align=center >-->
+    <!--<caption>欢迎 {{ username }} <br>采购单列表</caption>-->
+    <!--<thead>-->
+    <!--<tr>-->
+        <!--<th>合同号</th>-->
+        <!--<th>标题</th>-->
+        <!--<th>收货人</th>-->
+        <!--<th>供应商id</th>-->
+        <!--<th>仓库</th>-->
+        <!--<th>采购类型</th>-->
+        <!--<th>采购时间</th>-->
+        <!--<th>备注</th>-->
+        <!--<th>采购单状态</th>-->
+        <!--<th>操作</th>-->
+    <!--</tr>-->
+   <!--</thead>-->
+    <!--<tbody>-->
+    <!--{% for orderBean in all_orders %}-->
+    <!--<tr>-->
+        <!--<td>{{ orderBean.orderID }}</td>-->
+        <!--<td>{{ orderBean.orderTitle }} </td>-->
+        <!--<td>{{ orderBean.consigneeName }}</td>-->
+        <!--<td>{{ orderBean.supplierId }}</td>-->
+        <!--<td>{{ orderBean.storehouseId }}</td>-->
+        <!--<td>{{ orderBean.purchaseType }}</td>-->
+        <!--<td>{{ orderBean.businessDate }}</td>-->
+        <!--<td>{{ orderBean.remarks }}</td>-->
+        <!--<td>{{ orderBean.orderStatus }}</td>-->
+        <!--<td><a href="{% url 'delorder' orderBean.orderID %}" onclick="return confirm('你确认要删除吗?')">删除</a>-->
+            <!--<a href="{% url 'updateorder' orderBean.orderID %}">修改</a>-->
+
+            <!--<a href="{% url 'orderdetail' orderBean.orderID %}">详情</a></td>-->
+    <!--</tr>-->
+    <!--{% endfor %}-->
+    <!--</tbody>-->
+<!--</table>-->
+<!--<a href="{% url 'addorder' %}">增加</a>-->
+<!--{% else %}-->
+    <!--<p>No orderBean are available.</p>-->
+<!--{% endif %}-->
+
+
+{% if orders %}
+<table class="table" border="1" align=center >
+    <caption>欢迎 {{ username }} <br>采购单列表</caption>
+    <thead>
+    <tr>
+        <th>合同号</th>
+        <th>标题</th>
+        <th>收货人</th>
+        <th>供应商id</th>
+        <th>仓库</th>
+        <th>采购类型</th>
+        <th>采购时间</th>
+        <th>备注</th>
+        <th>采购单状态</th>
+        <th>操作</th>
+    </tr>
+   </thead>
+    {% for orderb in orders %}
+    <tbody>
+    <tr>
+        <td>{{ orderb.orderID }}</td>
+        <td>{{ orderb.orderTitle }} </td>
+        <td>{{ orderb.consigneeName }}</td>
+        <td>{{ orderb.supplierId }}</td>
+        <td>{{ orderb.storehouseId }}</td>
+        <td>{{ orderb.purchaseType }}</td>
+        <td>{{ orderb.businessDate }}</td>
+        <td>{{ orderb.remarks }}</td>
+        <td>{{ orderb.orderStatus }}</td>
+
+        <td>
+            {% if orderb.orderStatus == "审核"  %}
+            <a href="{% url 'delorder' orderb.orderID %}" onclick="return confirm('你确认要删除吗?')">删除</a>
+            <a href="{% url 'updateorder' orderb.orderID %}">修改</a>
+            {% endif %}
+
+            <!--<a href="{% url 'orderdetail' orderb.orderID %}">详情</a>-->
+            <a id="" onclick="displaydetail({{ orderb.orderID}} )">详情</a>
+            </td>
+    </tr>
+    </tbody>
+    {% endfor %}
+</table>
+{% else %}
+    <p>No orderBean are available.</p>
+{% endif %}
+
+<div class="pagination" align="center">
+    <span class="step-links">
+        {% if orders.has_previous %}
+            <a href="?page={{ orders.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            当前页 {{ orders.number }} of {{ orders.paginator.num_pages }}.
+        </span>
+
+        {% if orders.has_next %}
+            <a href="?page={{ orders.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+    <br>
+    <a href="{% url 'addorder' %}">增加</a>
+</div>
+
+
+
+
+
+</body>
+</html>

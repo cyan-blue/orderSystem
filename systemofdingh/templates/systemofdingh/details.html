@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+{% if orderdetail %}
+<table class="table" border="1" align=center >
+    <caption>欢迎 {{ username }} <br>采购单列表</caption>
+    <thead>
+    <tr>
+        <th>商品ID</th>
+        <th>产品名</th>
+        <th>规格ID</th>
+        <th>规格名</th>
+        <th>进价</th>
+        <th>数量</th>
+        <th>总价</th>
+    </tr>
+   </thead>
+    <tbody>
+    {% for orderBean in orderdetail %}
+    <tr>
+        <td>{{ orderBean.purchaseGoodID }}</td>
+        <td>{{ orderBean.purchaseGoodName }} </td>
+        <td>{{ orderBean.standardID }}</td>
+        <td>{{ orderBean.standardName }}</td>
+        <td>{{ orderBean.unitPrice }}</td>
+        <td>{{ orderBean.quantityGoods }}</td>
+        <td>{{ orderBean.totalPrice }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No orderBean are available.</p>
+{% endif %}
+{%if orderStatus == "审核"%}
+<a href="{% url 'addorderitem' detail_id %}">新增订单商品</a>
+{%endif%}
+</body>
+</html>

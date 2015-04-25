@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<form method="post" action="/order/addorderitem/{{ orderID }}" >
+    <input type='hidden' name='csrfmiddlewaretoken' value='Zljg7uBco9FpNX72xhqXtqku0kfdhHgC' />
+    <table>
+        <tr><th><label>订货单号:</label></th><td>
+            <a>{{ orderID}}</a></td></tr>
+        <tr><th><label for="id_purchaseGoodID">商品ID:</label></th><td>
+            <input id="id_purchaseGoodID" maxlength="10" name="purchaseGoodID" type="text" /></td></tr>
+        <tr><th><label for="id_purchaseGoodName">产品名:</label></th><td>
+            <input id="id_purchaseGoodName" maxlength="10" name="purchaseGoodName" type="text" /></td></tr>
+        <tr><th><label for="id_standardID">规格ID:</label></th><td>
+            <input id="id_standardID" maxlength="10" name="standardID" type="text" /></td></tr>
+        <tr><th><label for="id_standardName">规格名:</label></th><td>
+            <input id="id_standardName" maxlength="10" name="standardName" type="text" /></td></tr>
+        <tr><th><label for="id_unitPrice">进价:</label></th><td>
+            <input id="id_unitPrice" name="unitPrice" type="number" /></td></tr>
+        <tr><th><label for="id_quantityGoods">数量:</label></th><td>
+            <input id="id_quantityGoods" name="quantityGoods" type="number" /></td></tr>
+    </table>
+    <input type="submit" value="保存"/><input type="button" value="返回主页"  onclick="window.location.href='/order/home'"  />
+</form>
+</body>
+</html>
