@@ -40,6 +40,7 @@ def login(request):
 def regist(req):
     if req.method == 'POST':
         uf = UserForm(req.POST)
+        print uf.is_valid()
         if uf.is_valid():
             #获得表单数据
             username = uf.cleaned_data['username']
